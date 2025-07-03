@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/Screen/create_note.dart';
 import 'package:note_app/model/note_model.dart';
+import 'package:note_app/widgets/note_item.dart';
+import 'package:note_app/widgets/note_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,7 +21,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void onDeleteNote(int index) {
-    notes.removeAt(index);
+    setState(() {
+      notes.removeAt(index);
+    });
   }
 
   @override
@@ -31,22 +35,35 @@ class _HomePageState extends State<HomePage> {
         itemBuilder:
             (cts, index) => Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 8,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        notes[index].title,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(notes[index].story),
-                    ],
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder:
+                          (cts) => NoteView(
+                            note: notes[index],
+                            index: index,
+                            delete: onDeleteNote,
+                          ),
+                    ),
+                  );
+                },
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 8,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          notes[index].title,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(notes[index].story),
+                      ],
+                    ),
                   ),
                 ),
               ),
